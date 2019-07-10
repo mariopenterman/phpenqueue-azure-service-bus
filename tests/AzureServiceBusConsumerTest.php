@@ -49,7 +49,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock->setDate('10 September 2000');
         $messageMock->setBody(
             stream_for(
-                '<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>'
+                'Hi mate, how are you?'
             )
         );
         $messageMock->setDeliveryCount(2);
@@ -119,7 +119,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock->setDate('10 September 2000');
         $messageMock->setBody(
             stream_for(
-                '<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>'
+                'Hi mate, how are you?'
             )
         );
         $messageMock->setDeliveryCount(2);
