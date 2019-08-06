@@ -2,7 +2,6 @@
 Azure Service Bus transport is a messaging solution transport using Azure compatible with [Queue Interop](https://github.com/queue-interop/queue-interop)
 
 [![Build Status](https://travis-ci.org/assoconnect/phpenqueue-azure-service-bus.svg?branch=master)](https://travis-ci.org/assoconnect/phpenqueue-azure-service-bus)
-[![Coverage Status](https://coveralls.io/repos/github/assoconnect/phpenqueue-azure-service-bus/badge.svg?branch=master)](https://coveralls.io/github/assoconnect/phpenqueue-azure-service-bus?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=assoconnect_phpenqueue-azure-service-bus&metric=alert_status)](https://sonarcloud.io/dashboard?id=assoconnect_phpenqueue-azure-service-bus)
 
 The transport uses [Azure Service Bus](https://docs.microsoft.com/fr-fr/azure/service-bus-messaging/service-bus-php-how-to-use-queues) as a message broker.
