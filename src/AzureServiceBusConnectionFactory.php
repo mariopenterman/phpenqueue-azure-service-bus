@@ -14,7 +14,7 @@ class AzureServiceBusConnectionFactory implements ConnectionFactory
      */
     protected $connectionString;
 
-    public function __construct(string $connectionString)
+    public function __construct($connectionString)
     {
         $this->connectionString = $connectionString;
     }

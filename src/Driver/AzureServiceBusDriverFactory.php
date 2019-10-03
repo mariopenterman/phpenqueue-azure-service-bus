@@ -4,30 +4,22 @@ declare(strict_types=1);
 namespace Enqueue\AzureServiceBus\Driver;
 
 use Enqueue\AzureServiceBus\AzureServiceBusConnectionFactory;
+use Enqueue\Client\Resources;
 use Enqueue\ConnectionFactoryFactoryInterface;
+use Interop\Queue\ConnectionFactory;
 
 class AzureServiceBusDriverFactory implements ConnectionFactoryFactoryInterface
 {
     /**
-     * If string is used, it should be a valid DSN.
-     *
-     * If array is used, it must have a dsn key with valid DSN string.
-     * The other array options are treated as default values.
-     * Options from DSN overwrite them.
-     *
-     *
-     * @param string|array $config
-     * @return AzureServiceBusConnectionFactory
-     *
-     * @throws \InvalidArgumentException if invalid config provided
+     * @inheritDoc
      */
-    public function create($config) : \Interop\Queue\ConnectionFactory
+    public function create($config) : ConnectionFactory
     {
-        \Enqueue\Client\Resources::addDriver(
+        Resources::addDriver(
             AzureServiceBusDriver::class,
             ['azure'],
             [],
-            ['assoconnect/enqueue-azure']
+            ['assoconnect/phpenqueue-azure-service-bus']
         );
 
         $azureKey = $config['connection_string'];

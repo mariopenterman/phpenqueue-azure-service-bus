@@ -50,9 +50,6 @@ class AzureServiceBusContext implements Context
 
     public function createQueue(string $queueName): Queue
     {
-        $queueInfo = new QueueInfo($queueName);
-        $this->client->createQueue($queueInfo);
-
         return new AzureServiceBusDestination($queueName);
     }
 
