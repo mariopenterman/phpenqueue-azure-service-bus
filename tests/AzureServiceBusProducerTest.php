@@ -20,7 +20,7 @@ class AzureServiceBusProducerTest extends TestCase
 {
     use ClassExtensionTrait;
 
-    public function getProducer():AzureServiceBusProducer
+    public function getProducer(): AzureServiceBusProducer
     {
         return new AzureServiceBusProducer($this->createQueueRestProxyMock());
     }
@@ -79,7 +79,7 @@ class AzureServiceBusProducerTest extends TestCase
             ->expects($this->any())
             ->method('getTimestamp')
             ->willReturn(1542809366);
-        
+
         $messageMock = $this->createMock(IServiceBus::class);
         $messageMock
             ->expects($this->any())
@@ -161,7 +161,7 @@ class AzureServiceBusProducerTest extends TestCase
 
         $message = new AzureServiceBusMessage();
         $message->setBrokeredMessage(new BrokeredMessage());
-        $producer =  new AzureServiceBusProducer($messageMock);
+        $producer = new AzureServiceBusProducer($messageMock);
         $producer->setDeliveryDelay(100);
         $producer->setTimeToLive(100);
         $producer->send(new AzureServiceBusDestination('test'), $message);

@@ -5,8 +5,9 @@ namespace Enqueue\AzureServiceBus\Tests;
 use Enqueue\AzureServiceBus\AzureServiceBusConsumer;
 use Enqueue\AzureServiceBus\AzureServiceBusContext;
 use Enqueue\AzureServiceBus\AzureServiceBusDestination;
+use Enqueue\AzureServiceBus\AzureServiceBusMessage;
 use Enqueue\Test\ClassExtensionTrait;
-use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7;
 use Interop\Queue\Consumer;
 use WindowsAzure\Queue\Models\WindowsAzureQueueMessage;
 use WindowsAzure\ServiceBus\Models\BrokeredMessage;
@@ -48,9 +49,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock->setMessageId('testId');
         $messageMock->setDate('10 September 2000');
         $messageMock->setBody(
-            stream_for(
-                'Hi mate, how are you?'
-            )
+            'Hi mate, how are you?'
         );
         $messageMock->setDeliveryCount(2);
         $messageMock->setLockLocation('/testPath');
@@ -61,8 +60,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $serviceBusRestProxy
             ->expects($this->any())
             ->method('receiveQueueMessage')
-            ->willReturn($messageMock)
-        ;
+            ->willReturn($messageMock);
         $consumer = new AzureServiceBusConsumer(
             $serviceBusRestProxy,
             new AzureServiceBusDestination('test'),
@@ -71,7 +69,6 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $message = $consumer->receiveNoWait();
         $this->assertSame('Hi mate, how are you?', $message->getBody());
         $this->assertSame('testId', $message->getMessageId());
-        $this->assertSame($messageMock, $message->getBrokeredMessage());
     }
 
     public function testAcknowledge()
@@ -79,11 +76,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock = new BrokeredMessage();
         $messageMock->setMessageId('testId');
         $messageMock->setDate('10 September 2000');
-        $messageMock->setBody(
-            stream_for(
-                '<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>'
-            )
-        );
+        $messageMock->setBody('<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>');
         $messageMock->setDeliveryCount(2);
         $messageMock->setLockLocation('/testPath');
         $messageMock->setLockedUntilUtc(new \DateTime('+10 day'));
@@ -93,13 +86,12 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $serviceBusRestProxy
             ->expects($this->at(0))
             ->method('receiveQueueMessage')
-            ->willReturn($messageMock)
-        ;
+            ->willReturn($messageMock);
         $serviceBusRestProxy
             ->expects($this->at(1))
             ->method('receiveQueueMessage')
-            ->willReturn(new BrokeredMessage())
-        ;
+            ->willReturn(new BrokeredMessage());
+
         $consumer = new AzureServiceBusConsumer(
             $serviceBusRestProxy,
             new AzureServiceBusDestination('test'),
@@ -107,7 +99,10 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         );
         $message = $consumer->receiveNoWait();
 
-        $consumer->acknowledge($message);
+        $formattedMessage = new AzureServiceBusMessage();
+        $formattedMessage->setBrokeredMessage($messageMock);
+
+        $consumer->acknowledge($formattedMessage);
         $message = $consumer->receiveNoWait();
         $this->assertNull($message);
     }
@@ -117,11 +112,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock = new BrokeredMessage();
         $messageMock->setMessageId('testId');
         $messageMock->setDate('10 September 2000');
-        $messageMock->setBody(
-            stream_for(
-                'Hi mate, how are you?'
-            )
-        );
+        $messageMock->setBody('Hi mate, how are you?');
         $messageMock->setDeliveryCount(2);
         $messageMock->setLockLocation('/testPath');
         $messageMock->setLockedUntilUtc(new \DateTime('+10 day'));
@@ -131,28 +122,28 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $serviceBusRestProxy
             ->expects($this->at(0))
             ->method('receiveQueueMessage')
-            ->willReturn($messageMock)
-        ;
+            ->willReturn($messageMock);
         $serviceBusRestProxy
             ->expects($this->at(1))
             ->method('receiveQueueMessage')
-            ->willReturn($messageMock)
-        ;
+            ->willReturn($messageMock);
         $serviceBusRestProxy
             ->expects($this->at(2))
             ->method('receiveQueueMessage')
-            ->willReturn($messageMock)
-        ;
+            ->willReturn($messageMock);
         $consumer = new AzureServiceBusConsumer(
             $serviceBusRestProxy,
             new AzureServiceBusDestination('test'),
             new AzureServiceBusContext($serviceBusRestProxy)
         );
+        /** @var AzureServiceBusMessage $message */
         $message = $consumer->receiveNoWait();
+        $message->setBrokeredMessage($messageMock);
 
         // Reject and requeue
         $consumer->reject($message, true);
         $message = $consumer->receiveNoWait();
+        $message->setBrokeredMessage($messageMock);
         $this->assertSame('testId', $message->getMessageId());
 
         // Reject and don't requeue

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Enqueue\AzureServiceBus;
@@ -39,7 +40,7 @@ class AzureServiceBusMessage implements Message
     {
         $this->brokeredMessage = $brokeredMessage;
     }
-    
+
     public function __construct(string $body = '', array $properties = [], array $headers = [])
     {
         $this->body = $body;

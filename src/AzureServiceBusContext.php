@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Enqueue\AzureServiceBus;
@@ -16,7 +17,6 @@ use Interop\Queue\Queue;
 use Interop\Queue\SubscriptionConsumer;
 use Interop\Queue\Topic;
 use WindowsAzure\ServiceBus\Internal\IServiceBus;
-use WindowsAzure\ServiceBus\Models\QueueInfo;
 use WindowsAzure\ServiceBus\Models\TopicInfo;
 
 class AzureServiceBusContext implements Context
@@ -44,7 +44,6 @@ class AzureServiceBusContext implements Context
     {
         $topicInfo = new TopicInfo($topicName);
         $this->client->createTopic($topicInfo);
-
         return new AzureServiceBusDestination($topicName);
     }
 
@@ -62,7 +61,6 @@ class AzureServiceBusContext implements Context
     public function deleteQueue(Queue $queue): void
     {
         InvalidDestinationException::assertDestinationInstanceOf($queue, AzureServiceBusDestination::class);
-
         $this->client->deleteQueue($queue);
     }
 
@@ -74,7 +72,6 @@ class AzureServiceBusContext implements Context
     public function deleteTopic(Topic $topic): void
     {
         InvalidDestinationException::assertDestinationInstanceOf($topic, AzureServiceBusDestination::class);
-
         $this->client->deleteQueue($topic);
     }
 
@@ -101,7 +98,6 @@ class AzureServiceBusContext implements Context
     public function createConsumer(Destination $destination): Consumer
     {
         InvalidDestinationException::assertDestinationInstanceOf($destination, AzureServiceBusDestination::class);
-
         return new AzureServiceBusConsumer($this->client, $destination, $this);
     }
 

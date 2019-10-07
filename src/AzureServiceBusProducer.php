@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Enqueue\AzureServiceBus;
@@ -18,7 +19,6 @@ class AzureServiceBusProducer implements Producer
      * @var IServiceBus
      */
     protected $client;
-
     protected $deliveryDelay;
 
     public function __construct(IServiceBus $client)
@@ -36,7 +36,6 @@ class AzureServiceBusProducer implements Producer
     {
         InvalidDestinationException::assertDestinationInstanceOf($destination, AzureServiceBusDestination::class);
         InvalidMessageException::assertMessageInstanceOf($message, AzureServiceBusMessage::class);
-
         if (null !== $this->deliveryDelay && null === $message->getDeliveryDelay()) {
             $message->setDeliveryDelay($this->deliveryDelay);
         }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Enqueue\AzureServiceBus;
@@ -22,7 +23,6 @@ class AzureServiceBusConnectionFactory implements ConnectionFactory
     public function createContext(): Context
     {
         $client = ServicesBuilder::getInstance()->createServiceBusService($this->connectionString);
-
         return new AzureServiceBusContext($client);
     }
 }

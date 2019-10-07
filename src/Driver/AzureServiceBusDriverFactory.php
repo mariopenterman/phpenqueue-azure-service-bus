@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Enqueue\AzureServiceBus\Driver;
@@ -12,16 +13,10 @@ class AzureServiceBusDriverFactory implements ConnectionFactoryFactoryInterface
 {
     /**
      * @inheritDoc
-     */
-    public function create($config) : ConnectionFactory
+     **/
+    public function create($config): ConnectionFactory
     {
-        Resources::addDriver(
-            AzureServiceBusDriver::class,
-            ['azure'],
-            [],
-            ['assoconnect/phpenqueue-azure-service-bus']
-        );
-
+        Resources::addDriver(AzureServiceBusDriver::class, ['azure'], [], ['assoconnect/phpenqueue-azure-service-bus']);
         $azureKey = $config['connection_string'];
         return new AzureServiceBusConnectionFactory($azureKey);
     }
