@@ -49,7 +49,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock->setMessageId('testId');
         $messageMock->setDate('10 September 2000');
         $messageMock->setBody(
-            'Hi mate, how are you?'
+            Psr7\stream_for('Hi mate, how are you?')
         );
         $messageMock->setDeliveryCount(2);
         $messageMock->setLockLocation('/testPath');
@@ -76,7 +76,9 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock = new BrokeredMessage();
         $messageMock->setMessageId('testId');
         $messageMock->setDate('10 September 2000');
-        $messageMock->setBody('<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>');
+        $messageMock->setBody(Psr7\stream_for(
+            '<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>'
+        ));
         $messageMock->setDeliveryCount(2);
         $messageMock->setLockLocation('/testPath');
         $messageMock->setLockedUntilUtc(new \DateTime('+10 day'));
@@ -112,7 +114,7 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
         $messageMock = new BrokeredMessage();
         $messageMock->setMessageId('testId');
         $messageMock->setDate('10 September 2000');
-        $messageMock->setBody('Hi mate, how are you?');
+        $messageMock->setBody(Psr7\stream_for('Hi mate, how are you?'));
         $messageMock->setDeliveryCount(2);
         $messageMock->setLockLocation('/testPath');
         $messageMock->setLockedUntilUtc(new \DateTime('+10 day'));

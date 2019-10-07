@@ -53,7 +53,7 @@ class AzureServiceBusConsumer implements Consumer
 
         $message = $this->client->receiveQueueMessage($this->queue->getQueueName(), $options);
         if ($message) {
-            $messageBody = $message->getBody();
+            $messageBody = $message->getBody()->__toString();
             $messageProperties = $message->getProperties();
 
             $formattedMessage = new AzureServiceBusMessage();
