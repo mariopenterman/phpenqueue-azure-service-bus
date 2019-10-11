@@ -40,7 +40,7 @@ class AzureServiceBusMessage implements Message
     {
         $this->brokeredMessage = $brokeredMessage;
     }
-
+    
     public function __construct(string $body = '', array $properties = [], array $headers = [])
     {
         $this->body = $body;

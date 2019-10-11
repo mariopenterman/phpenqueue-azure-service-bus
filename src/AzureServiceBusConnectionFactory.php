@@ -15,7 +15,7 @@ class AzureServiceBusConnectionFactory implements ConnectionFactory
      */
     protected $connectionString;
 
-    public function __construct($connectionString)
+    public function __construct(string $connectionString)
     {
         $this->connectionString = $connectionString;
     }
@@ -23,6 +23,7 @@ class AzureServiceBusConnectionFactory implements ConnectionFactory
     public function createContext(): Context
     {
         $client = ServicesBuilder::getInstance()->createServiceBusService($this->connectionString);
+
         return new AzureServiceBusContext($client);
     }
 }

@@ -53,11 +53,11 @@ class AzureServiceBusConsumer implements Consumer
 
         $message = $this->client->receiveQueueMessage($this->queue->getQueueName(), $options);
         if ($message) {
-            $messageBody = $message->getBody()->__toString();
+            $messageBody = new \SimpleXMLElement($message->getBody()->__toString());
             $messageProperties = $message->getProperties();
 
             $formattedMessage = new AzureServiceBusMessage();
-            $formattedMessage->setBody($messageBody);
+            $formattedMessage->setBody((string)$messageBody[0]);
             $formattedMessage->setProperties($messageProperties);
             $formattedMessage->setHeaders([
                 'dequeue_count' => $message->getDeliveryCount(),
@@ -68,6 +68,7 @@ class AzureServiceBusConsumer implements Consumer
             $formattedMessage->setMessageId($message->getMessageId());
             $formattedMessage->setTimestamp(strtotime($message->getDate()));
             $formattedMessage->setRedelivered($message->getDeliveryCount() > 1);
+            $formattedMessage->setBrokeredMessage($message);
 
 
             return $formattedMessage;

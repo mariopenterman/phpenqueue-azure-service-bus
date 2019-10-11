@@ -79,7 +79,7 @@ class AzureServiceBusProducerTest extends TestCase
             ->expects($this->any())
             ->method('getTimestamp')
             ->willReturn(1542809366);
-
+        
         $messageMock = $this->createMock(IServiceBus::class);
         $messageMock
             ->expects($this->any())
@@ -137,36 +137,5 @@ class AzureServiceBusProducerTest extends TestCase
         $this->expectException(PriorityNotSupportedException::class);
         $this->expectExceptionMessage('The provider does not support priority feature');
         $producer->setPriority(10000);
-    }
-
-    public function testGetPriority()
-    {
-        $producer = $this->getProducer();
-        $this->assertNull($producer->getPriority());
-    }
-
-    public function testTimeToLive()
-    {
-        $producer = $this->getProducer();
-        $producer->setTimeToLive(100);
-        $this->assertSame(100, $producer->getTimeToLive());
-    }
-
-    public function testSend()
-    {
-        $messageMock = $this->createMock(IServiceBus::class);
-        $messageMock
-            ->expects($this->once())
-            ->method('sendQueueMessage');
-
-        $message = new AzureServiceBusMessage();
-        $message->setBrokeredMessage(new BrokeredMessage());
-        $producer = new AzureServiceBusProducer($messageMock);
-        $producer->setDeliveryDelay(100);
-        $producer->setTimeToLive(100);
-        $producer->send(new AzureServiceBusDestination('test'), $message);
-
-        $this->assertSame(100, $message->getTimeToLive());
-        $this->assertSame(100, $message->getDeliveryDelay());
     }
 }

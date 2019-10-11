@@ -140,8 +140,7 @@ class AzureServiceBusContextTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfNotAzureStorageDestinationGivenOnDeleteTopic()
     {
-        $client = $this->createQueueRestProxyMock();
-        $context = new AzureServiceBusContext($client);
+        $context = new AzureServiceBusContext($this->createQueueRestProxyMock());
 
         $this->expectException(InvalidDestinationException::class);
         $context->deleteTopic(new NullTopic('aTopic'));
@@ -160,7 +159,7 @@ class AzureServiceBusContextTest extends \PHPUnit\Framework\TestCase
             ->method('deleteQueue')
             ->with($topic);
 
-        $context->deleteTopic($topic);
+        $context->deleteQueue($topic);
     }
 
     public function testShouldReturnNotSupportedSubscriptionConsumerInstance()
