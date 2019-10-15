@@ -69,7 +69,10 @@ class AzureServiceBusConsumerTest extends \PHPUnit\Framework\TestCase
             new AzureServiceBusContext($serviceBusRestProxy)
         );
         $message = $consumer->receiveNoWait();
-        $this->assertSame('Hi mate, how are you?', $message->getBody());
+        $this->assertSame(
+            '<?xml version="1.0" encoding="utf-8"?><message>Hi mate, how are you?</message>',
+            $message->getBody()
+        );
         $this->assertSame('testId', $message->getMessageId());
         $this->assertSame($messageMock, $message->getBrokeredMessage());
     }

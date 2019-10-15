@@ -11,6 +11,7 @@ use Interop\Queue\Message;
 use Interop\Queue\Destination;
 use Interop\Queue\Producer;
 use WindowsAzure\ServiceBus\Internal\IServiceBus;
+use WindowsAzure\ServiceBus\Models\BrokeredMessage;
 
 class AzureServiceBusProducer implements Producer
 {
@@ -44,7 +45,12 @@ class AzureServiceBusProducer implements Producer
             $message->setTimeToLive($this->timeToLive);
         }
 
-        $brokeredMessage = $message->getBrokeredMessage();
+        $brokeredMessage = new BrokeredMessage();
+        $brokeredMessage->setBody($message->getBody());
+        foreach ($message->getProperties() as $propertyName => $propertyValue) {
+            $brokeredMessage->setProperty($propertyName, $propertyValue);
+        }
+
         // Send message.
         $this->client->sendQueueMessage($destination->getQueueName(), $brokeredMessage);
     }
